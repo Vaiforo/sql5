@@ -5,7 +5,13 @@ with src as (
     select u.*,
         case
             when u.last_service_date ~ '^\d{4}-\d{2}-\d{2}$' then u.last_service_date::date
+            when u.last_service_date ~ '^\d{2}\.\d{2}\.\d{4}$'
+                and substring(u.last_service_date, 1, 2)::int <= 12
+                then to_date(u.last_service_date, 'MM.DD.YYYY')
             when u.last_service_date ~ '^\d{2}\.\d{2}\.\d{4}$' then to_date(u.last_service_date, 'DD.MM.YYYY')
+            when u.last_service_date ~ '^\d{2}-\d{2}-\d{4}$'
+                and substring(u.last_service_date, 1, 2)::int <= 12
+                then to_date(u.last_service_date, 'MM-DD-YYYY')
             when u.last_service_date ~ '^\d{2}-\d{2}-\d{4}$' then to_date(u.last_service_date, 'DD-MM-YYYY')
             when u.last_service_date ~ '^\d{4}-\d{2}-\d{2}T' then to_timestamp(
                 u.last_service_date,

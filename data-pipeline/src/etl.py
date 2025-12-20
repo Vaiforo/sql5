@@ -6,7 +6,7 @@ from src.fill_structured_table import fill_structured_table
 
 
 def etl():
-    n = 20
+    n = 100
     start_date = date(2023, 1, 1)
     end_date = date(2025, 12, 31)
 
