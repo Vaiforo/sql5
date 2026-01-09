@@ -7,12 +7,12 @@ from src.fill_structured_table import fill_structured_table
 
 def etl():
     n = 100
-    start_date = date(2023, 1, 1)
+    start_date = date(1995, 1, 1)
     end_date = date(2025, 12, 31)
 
-    df = get_dataset(n)
+    # df = get_dataset(n)
 
-    load_data_to_db(df)
+    # load_data_to_db(df)
 
     fill_structured_table(start_date, end_date)
 

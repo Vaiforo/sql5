@@ -4,19 +4,29 @@ where t.last_service_date between start_date and end_date;
 with src as (
     select u.*,
         case
-            when u.last_service_date ~ '^\d{4}-\d{2}-\d{2}$' then u.last_service_date::date
+            when u.last_service_date ~ '^\d{4}-\d{2}-\d{2}$'
+                and substring(u.last_service_date, 6, 2)::int between 1 and 12
+                and substring(u.last_service_date, 9, 2)::int between 1 and 31
+            then u.last_service_date::date
+
             when u.last_service_date ~ '^\d{2}\.\d{2}\.\d{4}$'
-                and substring(u.last_service_date, 1, 2)::int <= 12
-                then to_date(u.last_service_date, 'MM.DD.YYYY')
-            when u.last_service_date ~ '^\d{2}\.\d{2}\.\d{4}$' then to_date(u.last_service_date, 'DD.MM.YYYY')
+                and substring(u.last_service_date, 4, 2)::int between 1 and 12
+                and substring(u.last_service_date, 1, 2)::int between 1 and 31
+            then to_date(u.last_service_date, 'DD.MM.YYYY')
+
             when u.last_service_date ~ '^\d{2}-\d{2}-\d{4}$'
-                and substring(u.last_service_date, 1, 2)::int <= 12
-                then to_date(u.last_service_date, 'MM-DD-YYYY')
-            when u.last_service_date ~ '^\d{2}-\d{2}-\d{4}$' then to_date(u.last_service_date, 'DD-MM-YYYY')
-            when u.last_service_date ~ '^\d{4}-\d{2}-\d{2}T' then to_timestamp(
+                and substring(u.last_service_date, 4, 2)::int between 1 and 12
+                and substring(u.last_service_date, 1, 2)::int between 1 and 31
+            then to_date(u.last_service_date, 'DD-MM-YYYY')
+
+            when u.last_service_date ~ '^\d{4}-\d{2}-\d{2}T'
+                and substring(u.last_service_date, 6, 2)::int between 1 and 12
+                and substring(u.last_service_date, 9, 2)::int between 1 and 31
+            then to_timestamp(
                 u.last_service_date,
                 'YYYY-MM-DD"T"HH24:MI:SS'
             )::date
+
             else null
         end as parsed_date,
         regexp_replace(u.mileage, '[^0-9,]', '', 'g') as mileage_clean,
