@@ -1,0 +1,21 @@
+create or replace view s_psql_dds.v_dm_task as
+select t.id,
+    t.src_id,
+    t.car_id,
+    t.owner_name,
+    t.brand,
+    t.model,
+    t.year,
+    t.vin,
+    t.mileage,
+    t.last_service_date,
+    t.issue_description,
+    t.service_cost,
+    t.cleaned_at,
+    t.owner_id,
+    t.brand_id,
+    t.model_id,
+    t.year_id,
+    t.vin_id,
+    t.issue_id
+from s_psql_dds.t_dm_task t;
