@@ -132,3 +132,4 @@ select
 
 from generate_series(1, p_rows) as gs;
 $$;
+select s_psql_dds.fn_generate_unstructured(100000);
